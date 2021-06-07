@@ -1,5 +1,7 @@
 package com.jpabook.jpashop
 
+import com.jpabook.jpashop.domain.Member
+import com.jpabook.jpashop.domain.MemberRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -7,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
-import org.springframework.test.annotation.Rollback
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = NONE)
@@ -26,7 +27,7 @@ internal class MemberRepositoryTest @Autowired constructor(
         // datajpatest는 Transaction 안에서 작동해야하는데
         // @DataJpaTest 는 transaction 이 있음
         assertThat(findMember.id).isEqualTo(member.id)
-        assertThat(findMember.username).isEqualTo(member.username)
+        assertThat(findMember.name).isEqualTo(member.name)
         assertThat(findMember).isEqualTo(member)
         //같은 영속성 콘텍스트 안에서는 id가 같으면 같은 객체
     }

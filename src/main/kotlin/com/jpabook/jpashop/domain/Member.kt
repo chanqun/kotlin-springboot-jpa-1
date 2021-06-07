@@ -1,14 +1,18 @@
-package com.jpabook.jpashop
+package com.jpabook.jpashop.domain
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
+import javax.persistence.*
 
 @Entity
 class Member(
+    var name: String,
 
-    val username: String,
+    @Embedded
+    var address: Address? = null,
+
+    @OneToMany(mappedBy = "member")
+    var orders: MutableList<Order> = mutableListOf(),
 
     @Id @GeneratedValue
-    val id: Long? = null
+    @Column(name = "member_id")
+    var id: Long? = null
 )
