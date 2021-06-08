@@ -7,14 +7,14 @@ import javax.persistence.*
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")
 open class Item (
-    var name: String? = null,
-    var print: Int? = null,
-    var stockQuantity: Int? = null,
+    open var name: String? = null,
+    open var print: Int? = null,
+    open var stockQuantity: Int? = null,
 
     @ManyToMany(mappedBy = "items")
-    var categories: MutableList<Category> = mutableListOf(),
+    open var categories: MutableList<Category> = mutableListOf(),
 
     @Id @GeneratedValue
-    @Column("item_id")
-    var id: Long? = null
+    @Column(name = "item_id")
+    open var id: Long? = null
 )
