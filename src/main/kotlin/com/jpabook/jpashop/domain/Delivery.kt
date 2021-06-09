@@ -1,10 +1,11 @@
 package com.jpabook.jpashop.domain
 
 import javax.persistence.*
+import javax.persistence.FetchType.*
 
 @Entity
 class Delivery(
-    @OneToOne(mappedBy = "delivery")
+    @OneToOne(mappedBy = "delivery", fetch = LAZY)
     var order: Order,
 
     @Embedded

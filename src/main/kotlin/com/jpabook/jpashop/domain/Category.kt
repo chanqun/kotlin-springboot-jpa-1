@@ -2,6 +2,7 @@ package com.jpabook.jpashop.domain
 
 import com.jpabook.jpashop.domain.item.Item
 import javax.persistence.*
+import javax.persistence.FetchType.*
 
 @Entity
 class Category(
@@ -15,7 +16,7 @@ class Category(
     )
     var items: MutableList<Item> = mutableListOf(),
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "parent_id")
     var parent: Category,
 
@@ -25,4 +26,9 @@ class Category(
     @Id @GeneratedValue
     @Column(name = "category_id")
     var id: Long
-)
+) {
+    fun addChildCategory(child: Category) {
+        this.child.add(child)
+        child.parent = this
+    }
+}
