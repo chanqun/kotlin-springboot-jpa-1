@@ -2,13 +2,12 @@ package com.jpabook.jpashop.service
 
 import com.jpabook.jpashop.domain.Member
 import com.jpabook.jpashop.repository.MemberRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class MemberService @Autowired constructor(
-    val memberRepository: MemberRepository
+class MemberService(
+    private val memberRepository: MemberRepository
     // mocking 하기도 좋음
 ) {
 

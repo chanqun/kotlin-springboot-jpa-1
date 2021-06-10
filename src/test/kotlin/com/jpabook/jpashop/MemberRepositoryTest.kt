@@ -1,7 +1,7 @@
 package com.jpabook.jpashop
 
 import com.jpabook.jpashop.domain.Member
-import com.jpabook.jpashop.domain.MemberRepository
+import com.jpabook.jpashop.repository.MemberRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
