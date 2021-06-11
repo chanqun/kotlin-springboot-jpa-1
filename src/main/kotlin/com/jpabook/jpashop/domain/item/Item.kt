@@ -1,6 +1,7 @@
 package com.jpabook.jpashop.domain.item
 
 import com.jpabook.jpashop.domain.Category
+import com.jpabook.jpashop.domain.exception.NotEnoughStockException
 import javax.persistence.*
 
 @Entity
@@ -17,4 +18,21 @@ open class Item (
     @Id @GeneratedValue
     @Column(name = "item_id")
     open var id: Long? = null
-)
+) {
+    /**
+     * stock 증가
+     */
+    fun addStock(quantity: Int) {
+        this.stockQuantity!!.plus(quantity)
+    }
+
+    /**
+     * stock 감소
+     */
+    fun removeStock(quantity: Int) {
+        val restStock = this.stockQuantity!!.minus(quantity)
+        if(restStock < 0) throw NotEnoughStockException()
+
+        this.stockQuantity = restStock
+    }
+}

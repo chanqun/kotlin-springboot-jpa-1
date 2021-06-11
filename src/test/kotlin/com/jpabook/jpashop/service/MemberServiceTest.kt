@@ -4,7 +4,6 @@ import com.jpabook.jpashop.domain.Member
 import com.jpabook.jpashop.repository.MemberRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -29,9 +28,13 @@ internal class MemberServiceTest @Autowired constructor(
     fun `중복 회원 예외`() {
         var member = Member("sung")
 
+        var member2 = Member("sung")
+
         memberService.join(member)
 
-        assertThatThrownBy{ memberService.join(member) }
+        assertThatThrownBy { memberService.join(member2) }
             .isInstanceOf(IllegalStateException::class.java)
+
+        // fail("예외가 발생해야 한다.") 여기 오면 안 되는 것
     }
 }
