@@ -6,6 +6,7 @@ import com.jpabook.jpashop.domain.OrderItem
 import com.jpabook.jpashop.repository.ItemRepository
 import com.jpabook.jpashop.repository.MemberRepository
 import com.jpabook.jpashop.repository.OrderRepository
+import com.jpabook.jpashop.repository.OrderSearch
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -49,7 +50,7 @@ class OrderService @Autowired constructor(
     }
 
     //검색
-//    fun findOrders(orderSearch: OrderSearch) {
-//
-//    }
+    fun findOrders(orderSearch: OrderSearch) {
+
+    }
 }
