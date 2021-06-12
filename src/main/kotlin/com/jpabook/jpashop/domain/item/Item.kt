@@ -7,10 +7,10 @@ import javax.persistence.*
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")
-open class Item (
+open class Item(
     open var name: String? = null,
-    open var print: Int? = null,
-    open var stockQuantity: Int? = null,
+    open var price: Int? = null,
+    open var stockQuantity: Int = 0,
 
     @ManyToMany(mappedBy = "items")
     open var categories: MutableList<Category> = mutableListOf(),
@@ -23,7 +23,7 @@ open class Item (
      * stock 증가
      */
     fun addStock(quantity: Int) {
-        this.stockQuantity!!.plus(quantity)
+        this.stockQuantity += quantity
     }
 
     /**
@@ -31,7 +31,7 @@ open class Item (
      */
     fun removeStock(quantity: Int) {
         val restStock = this.stockQuantity!!.minus(quantity)
-        if(restStock < 0) throw NotEnoughStockException()
+        if (restStock < 0) throw NotEnoughStockException()
 
         this.stockQuantity = restStock
     }

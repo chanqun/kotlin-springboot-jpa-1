@@ -6,15 +6,15 @@ import javax.persistence.FetchType.*
 @Entity
 class Delivery(
     @OneToOne(mappedBy = "delivery", fetch = LAZY)
-    var order: Order,
+    var order: Order? = null,
 
     @Embedded
-    var address: Address,
+    var address: Address? = null,
 
     @Enumerated(EnumType.STRING)
-    var status: DeliveryStatus,
+    var status: DeliveryStatus? = null,
 
     @Id @GeneratedValue
     @Column(name = "delivery_id")
-    var id: Long,
+    var id: Long? = null,
 )

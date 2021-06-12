@@ -46,7 +46,7 @@ class Order(
 
     // 생상 메사드
     companion object {
-        fun createOrder(member: Member, delivery: Delivery, orderItems: MutableList<OrderItem>): Order {
+        fun createOrder(member: Member, delivery: Delivery, vararg orderItems: OrderItem): Order {
             var order = Order(orderDate = LocalDateTime.now(), status = OrderStatus.ORDER)
             order.addMember(member)
             order.addDelivery(delivery)
