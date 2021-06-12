@@ -35,4 +35,13 @@ class MemberController(
         memberService.join(member)
         return "redirect:/"
     }
+
+    @GetMapping
+    fun list(model: Model): String {
+        // 화면에 뿌릴 때 처리를 해야한다면 반환 객체를 만드는 것이 좋을 것이다.
+        // api를 만들때는 절대 멤버 엔티티를 반환하면 안 된다.!!!
+        val members = memberService.findMembers()
+        model["members"] = members
+        return "members/memberList"
+    }
 }
