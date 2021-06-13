@@ -45,11 +45,12 @@ class ItemController(
     }
 
     @PostMapping("/{itemId}/edit")
-    fun updateItem(@ModelAttribute("form") form: BookForm, @PathVariable itemId: String): String {
-
-        val book = Book.createBook(form)
-
-        itemService.saveItem(book)
+    fun updateItem(@ModelAttribute("form") form: BookForm, @PathVariable itemId: Long): String {
+        // merge 방법
+        // itemService.saveItem(book)
+        
+        // 값이 많으면 dto를 하나 만들자
+        itemService.updateItem(itemId, form)
 
         return "redirect:/items"
     }

@@ -35,4 +35,10 @@ open class Item(
 
         this.stockQuantity = restStock
     }
+
+    fun change(name: String?, price: Int?, stockQuantity: Int?) {
+        this.name = name
+        this.price = price
+        this.stockQuantity = stockQuantity
+    }
 }
