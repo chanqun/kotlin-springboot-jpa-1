@@ -10,7 +10,7 @@ import javax.persistence.*
 open class Item(
     open var name: String? = null,
     open var price: Int? = null,
-    open var stockQuantity: Int = 0,
+    open var stockQuantity: Int? = null,
 
     @ManyToMany(mappedBy = "items")
     open var categories: MutableList<Category> = mutableListOf(),
@@ -23,7 +23,7 @@ open class Item(
      * stock 증가
      */
     fun addStock(quantity: Int) {
-        this.stockQuantity += quantity
+        this.stockQuantity = this.stockQuantity!!.plus(quantity)
     }
 
     /**

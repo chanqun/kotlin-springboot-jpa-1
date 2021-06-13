@@ -18,6 +18,7 @@ class Book(
             book.isbn = bookForm.isbn
             book.stockQuantity = bookForm.stockQuantity
             book.price = bookForm.price
+            book.id = bookForm.id
 
             return book
         }

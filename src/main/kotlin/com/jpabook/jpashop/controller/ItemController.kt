@@ -5,9 +5,7 @@ import com.jpabook.jpashop.service.ItemService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
 
 @Controller
 @RequestMapping("/items")
@@ -33,5 +31,26 @@ class ItemController(
         val items = itemService.findItems()
         model["items"] = items
         return "items/itemList"
+    }
+
+    @GetMapping("/{itemId}/edit")
+    fun updateItemForm(@PathVariable itemId: Long, model: Model): String {
+        var item: Book = itemService.findOne(itemId) as Book
+
+        var form = BookForm(item.id, item.name, item.price!!, item.stockQuantity!!, item.author, item.isbn)
+
+        model["form"] = form
+
+        return "/items/updateItemForm"
+    }
+
+    @PostMapping("/{itemId}/edit")
+    fun updateItem(@ModelAttribute("form") form: BookForm, @PathVariable itemId: String): String {
+
+        val book = Book.createBook(form)
+
+        itemService.saveItem(book)
+
+        return "redirect:/items"
     }
 }
