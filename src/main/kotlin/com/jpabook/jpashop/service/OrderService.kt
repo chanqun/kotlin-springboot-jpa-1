@@ -3,10 +3,7 @@ package com.jpabook.jpashop.service
 import com.jpabook.jpashop.domain.Delivery
 import com.jpabook.jpashop.domain.Order
 import com.jpabook.jpashop.domain.OrderItem
-import com.jpabook.jpashop.repository.ItemRepository
-import com.jpabook.jpashop.repository.MemberRepository
-import com.jpabook.jpashop.repository.OrderRepository
-import com.jpabook.jpashop.repository.OrderSearch
+import com.jpabook.jpashop.repository.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -15,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 class OrderService @Autowired constructor(
     private val orderRepository: OrderRepository,
+    private val orderRepositoryImpl: OrderRepositoryImpl,
     private val memberRepository: MemberRepository,
     private val itemRepository: ItemRepository
 ) {
@@ -50,7 +48,7 @@ class OrderService @Autowired constructor(
     }
 
     //검색
-    fun findOrders(orderSearch: OrderSearch) {
-
+    fun findOrders(orderSearch: OrderSearch): List<Order> {
+        return orderRepositoryImpl.findAll2(orderSearch)
     }
 }

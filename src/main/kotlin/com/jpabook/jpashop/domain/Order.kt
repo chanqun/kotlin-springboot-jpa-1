@@ -50,9 +50,11 @@ class Order(
             var order = Order(orderDate = LocalDateTime.now(), status = OrderStatus.ORDER)
             order.addMember(member)
             order.addDelivery(delivery)
+
             for (orderItem in orderItems) {
                 order.addOrderItem(orderItem)
             }
+
             return order
         }
     }
@@ -67,9 +69,8 @@ class Order(
         }
 
         this.status = OrderStatus.CANCEL
-        for (orderItem in orderItems) {
-            orderItem.cancel()
-        }
+
+        orderItems.stream().forEach { it.cancel() }
     }
 
     // 조회 로직
@@ -78,9 +79,7 @@ class Order(
      */
     fun getTotalPrice(): Int {
         var totalPrice = 0
-        for (orderItem in orderItems) {
-            totalPrice += orderItem.getTotalPrice()
-        }
+        orderItems.stream().forEach { totalPrice += it.getTotalPrice() }
         return totalPrice
     }
 }
