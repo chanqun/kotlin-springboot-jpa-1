@@ -2,11 +2,11 @@ package com.jpabook.jpashop.api
 
 import com.jpabook.jpashop.api.dto.CreateMemberRequest
 import com.jpabook.jpashop.api.dto.CreateMemberResponse
+import com.jpabook.jpashop.api.dto.UpdateMemberRequest
+import com.jpabook.jpashop.api.dto.UpdateMemberResponse
 import com.jpabook.jpashop.domain.Member
 import com.jpabook.jpashop.service.MemberService
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 @RestController
@@ -31,5 +31,14 @@ class MemberApiController(
         val id = memberService.join(member)
 
         return CreateMemberResponse(id)
+    }
+
+    @PutMapping("/api/v2/members/{id}")
+    fun updateMember(@PathVariable id: Long, @RequestBody @Valid req: UpdateMemberRequest): UpdateMemberResponse {
+        memberService.update(id, req.name)
+        
+        val findMember = memberService.findOne(id)
+
+        return UpdateMemberResponse(findMember.id!!, findMember.name)
     }
 }

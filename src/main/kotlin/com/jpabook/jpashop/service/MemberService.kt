@@ -38,4 +38,11 @@ class MemberService(
     fun findOne(id: Long): Member {
         return memberRepository.findById(id).get()
     }
+
+    @Transactional
+    fun update(id: Long, name: String) {
+        val member = memberRepository.findById(id).get()
+
+        member.name = name
+    }
 }
