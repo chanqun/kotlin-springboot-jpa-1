@@ -1,9 +1,6 @@
 package com.jpabook.jpashop.api
 
-import com.jpabook.jpashop.api.dto.CreateMemberRequest
-import com.jpabook.jpashop.api.dto.CreateMemberResponse
-import com.jpabook.jpashop.api.dto.UpdateMemberRequest
-import com.jpabook.jpashop.api.dto.UpdateMemberResponse
+import com.jpabook.jpashop.api.dto.*
 import com.jpabook.jpashop.domain.Member
 import com.jpabook.jpashop.service.MemberService
 import org.springframework.web.bind.annotation.*
@@ -13,6 +10,27 @@ import javax.validation.Valid
 class MemberApiController(
     private val memberService: MemberService
 ) {
+
+    @GetMapping("/api/v1/members")
+    fun membersV1(): List<Member> {
+        //entity에 @JsonIgnore을 넣으면 order 정보가 빠진다.
+        return memberService.findMembers()
+    }
+
+    /**
+     * "count" : 4
+     * "list" : array만 반환하면 하면 유연성이 떨어짐
+     */
+    @GetMapping("/api/v2/members")
+    fun membersV2(): Response<List<MemberDto>> {
+        val members = memberService.findMembers()
+
+        val collect = members.map {
+            MemberDto(it.name)
+        }
+
+        return Response(collect)
+    }
 
     @PostMapping("/api/v1/members")
     fun saveMemberV1(@RequestBody @Valid member: Member): CreateMemberResponse {
@@ -36,7 +54,7 @@ class MemberApiController(
     @PutMapping("/api/v2/members/{id}")
     fun updateMember(@PathVariable id: Long, @RequestBody @Valid req: UpdateMemberRequest): UpdateMemberResponse {
         memberService.update(id, req.name)
-        
+
         val findMember = memberService.findOne(id)
 
         return UpdateMemberResponse(findMember.id!!, findMember.name)
