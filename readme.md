@@ -78,3 +78,5 @@ kotlin 에서는 vararg로 해결할 수 있다
 - 컬렉션 조회 회적화
 - 페이징과 한계 돌파
 - OSIV와 성능 최적화 -> open session in view 
+
+#### 지연 로딩과 조회 성능 최적화
