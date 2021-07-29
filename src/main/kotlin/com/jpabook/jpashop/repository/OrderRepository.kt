@@ -5,7 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import javax.persistence.EntityManager
 
-interface OrderRepository : JpaRepository<Order, Long>
+interface OrderRepository : JpaRepository<Order, Long> {
+    fun findAllWithMemberDelivery(): List<Order>
+
+}
 
 @Repository
 class OrderRepositoryImpl(
@@ -28,5 +31,11 @@ class OrderRepositoryImpl(
     //3. Query DSL
     fun findAll(orderSearch: OrderSearch) {
         //val order
+    }
+
+    fun findAllWithMemberDelivery(): List<Order> {
+        return entityManager.createQuery(
+            "select o from Order o join fetch o.member join fetch o.delivery d", Order::class.java
+        ).resultList
     }
 }
