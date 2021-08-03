@@ -59,4 +59,6 @@ class MemberApiController(
 
         return UpdateMemberResponse(findMember.id!!, findMember.name)
     }
+
+
 }

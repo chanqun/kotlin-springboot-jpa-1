@@ -1,5 +1,6 @@
 package com.jpabook.jpashop.repository
 
+import com.jpabook.jpashop.api.dto.SimpleOrderDto
 import com.jpabook.jpashop.domain.Order
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
@@ -8,6 +9,7 @@ import javax.persistence.EntityManager
 interface OrderRepository : JpaRepository<Order, Long> {
     fun findAllWithMemberDelivery(): List<Order>
 
+    fun findOrderDtos(): List<SimpleOrderDto>
 }
 
 @Repository
@@ -36,6 +38,15 @@ class OrderRepositoryImpl(
     fun findAllWithMemberDelivery(): List<Order> {
         return entityManager.createQuery(
             "select o from Order o join fetch o.member join fetch o.delivery d", Order::class.java
+        ).resultList
+    }
+
+    fun findOrderDtos(): List<SimpleOrderDto> {
+        return entityManager.createQuery(
+            "select new com.jpabook.jpashop.api.dto.SimpleOrderDto(o.id, m.name, o.orderDate, o.status, d.address) " +
+                    " from Order o " +
+                    " join o.member m" +
+                    " join o.delivery d", SimpleOrderDto::class.java
         ).resultList
     }
 }

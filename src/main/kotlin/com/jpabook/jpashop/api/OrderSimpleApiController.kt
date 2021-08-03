@@ -45,4 +45,12 @@ class OrderSimpleApiController(
             SimpleOrderDto(it.id, it.member!!.name, it.orderDate, it.status, it.delivery!!.address)
         }
     }
+
+    @GetMapping("/api/v4/simple-orders")
+    fun ordersV4(): List<SimpleOrderDto> {
+        // 성능은 4번이 좋지만 3번은 재사용성이 좋다 -> 성능 검사를 해봐야한다!!
+        // repository는 entity 조회 까지가 좋다.
+        // 이런 경우 simpleQueryRepository로 뽑아내서 관리하는 것이 좋을듯!!
+        return orderRepository.findOrderDtos()
+    }
 }
