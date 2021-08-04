@@ -80,3 +80,8 @@ kotlin 에서는 vararg로 해결할 수 있다
 - OSIV와 성능 최적화 -> open session in view 
 
 #### 지연 로딩과 조회 성능 최적화
+
+
+#### 컬렉션 조회 최적화
+주문내역에서 추가로 주문한 상품 정보를 추가로 조회
+Order 기준으로 OrderItem과 Item 이 필요하다
