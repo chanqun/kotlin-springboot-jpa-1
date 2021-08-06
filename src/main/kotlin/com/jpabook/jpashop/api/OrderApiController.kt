@@ -1,5 +1,7 @@
 package com.jpabook.jpashop.api
 
+import com.jpabook.jpashop.api.dto.OrderDto
+import com.jpabook.jpashop.api.dto.OrderItemDto
 import com.jpabook.jpashop.domain.Order
 import com.jpabook.jpashop.repository.OrderRepository
 import org.springframework.web.bind.annotation.GetMapping
@@ -20,11 +22,27 @@ class OrderApiController(
             it.delivery!!.address
             val orderItems = it.orderItems
 
-            orderItems.forEach{
-                o -> o.item!!.name
+            orderItems.forEach { o ->
+                o.item!!.name
             }
         }
 
         return orders
+    }
+
+    @GetMapping("/api/v2/orders")
+    fun ordersV2(): List<OrderDto> {
+        val orders = orderRepository.findAll()
+
+        return orders.map {
+            OrderDto(
+                it.id!!,
+                it.member!!.name,
+                it.orderDate,
+                it.status!!,
+                it.delivery!!.address!!,
+                OrderItemDto.of(it.orderItems)
+            )
+        }
     }
 }
