@@ -45,4 +45,27 @@ class OrderApiController(
             )
         }
     }
+
+    @GetMapping("/api/v3/orders")
+    fun ordersV3(): List<OrderDto> {
+        // 1대다에서 다에 맞추기 때문에 데이터를 뻥튀기해서 준다.
+        // distinct를 넣어주면 중복이 제거 된다.
+        // db에서 가져온 결과는 똑같지만 jpa에서 자체적으로 order가 같은 값이면 중복을 제거해준다.
+        //
+        // 1대다를 fetch join 하면
+        // 단점!!!! - 페이징 불가능 -> 전부 올리고 페이징을 처리한다.;;;;;
+        // 컬렉션 페치 조인은 하나만 사용하자
+        val orders = orderRepository.findAllWithItem()
+
+        return orders.map {
+            OrderDto(
+                it.id!!,
+                it.member!!.name,
+                it.orderDate,
+                it.status!!,
+                it.delivery!!.address!!,
+                OrderItemDto.of(it.orderItems)
+            )
+        }
+    }
 }
