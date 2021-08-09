@@ -12,6 +12,8 @@ interface OrderRepository : JpaRepository<Order, Long> {
     fun findOrderDtos(): List<SimpleOrderDto>
 
     fun findAllWithItem(): List<Order>
+
+    fun findAllWithMemberDelivery(offset: Int, limit: Int): List<Order>
 }
 
 @Repository
@@ -57,5 +59,14 @@ class OrderRepositoryImpl(
             "select distinct o from Order o join fetch o.member m join fetch o.delivery d join fetch o.orderItems oi join fetch oi.item i",
             Order::class.java
         ).resultList
+    }
+
+    fun findAllWithMemberDelivery(offset: Int, limit: Int): List<Order> {
+        return entityManager.createQuery(
+            "select distinct o from Order o " +
+                    "join fetch o.member m " +
+                    "join fetch o.delivery d",
+            Order::class.java
+        ).setFirstResult(offset).setMaxResults(limit).resultList
     }
 }

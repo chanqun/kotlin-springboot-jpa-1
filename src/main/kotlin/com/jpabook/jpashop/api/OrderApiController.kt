@@ -5,6 +5,7 @@ import com.jpabook.jpashop.api.dto.OrderItemDto
 import com.jpabook.jpashop.domain.Order
 import com.jpabook.jpashop.repository.OrderRepository
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -56,6 +57,32 @@ class OrderApiController(
         // 단점!!!! - 페이징 불가능 -> 전부 올리고 페이징을 처리한다.;;;;;
         // 컬렉션 페치 조인은 하나만 사용하자
         val orders = orderRepository.findAllWithItem()
+
+        return orders.map {
+            OrderDto(
+                it.id!!,
+                it.member!!.name,
+                it.orderDate,
+                it.status!!,
+                it.delivery!!.address!!,
+                OrderItemDto.of(it.orderItems)
+            )
+        }
+    }
+
+    /**
+     * ToOne은 페치조인으로 가져오고
+     * 컬렉션은 지연 로딩으로 조회한다.
+     * hibernate.default_batch_fetch_size, @BatchSize 를 적용한다.
+     * // 100 - 1000 개 정도가 좋다.
+     */
+    @GetMapping("/api/v3.1/orders")
+    fun ordersV3_page(
+        @RequestParam(value = "offset", defaultValue = "0") offset: Int,
+        @RequestParam(value = "limit", defaultValue = "100") limit: Int,
+    ): List<OrderDto> {
+
+        val orders = orderRepository.findAllWithMemberDelivery(offset, limit)
 
         return orders.map {
             OrderDto(
