@@ -2,15 +2,18 @@ package com.jpabook.jpashop.api
 
 import com.jpabook.jpashop.api.dto.OrderDto
 import com.jpabook.jpashop.api.dto.OrderItemDto
+import com.jpabook.jpashop.api.dto.OrderQueryDto
 import com.jpabook.jpashop.domain.Order
 import com.jpabook.jpashop.repository.OrderRepository
+import com.jpabook.jpashop.repository.query.OrderQueryRepository
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class OrderApiController(
-    private val orderRepository: OrderRepository
+    private val orderRepository: OrderRepository,
+    private val orderQueryRepository: OrderQueryRepository
 ) {
 
     //@GetMapping("/api/v1/orders")
@@ -95,4 +98,9 @@ class OrderApiController(
             )
         }
     }
+
+//    @GetMapping("/api/v4/orders")
+//    fun ordersV4(): List<OrderQueryDto> {
+//        return orderQueryRepository.findOrderQueryDtos()
+//    }
 }
