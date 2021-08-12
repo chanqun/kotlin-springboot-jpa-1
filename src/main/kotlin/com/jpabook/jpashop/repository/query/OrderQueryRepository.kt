@@ -24,12 +24,36 @@ class OrderQueryRepository(
 //        return result
 //    }
 
+//    fun findAllByDto_optimization(): List<OrderQueryDto> {
+//        val result: List<OrderQueryDto> = findOrders()
+//
+//        val orderIds = result.map {
+//            it.orderId
+//        }
+//
+//        val orderItems = em.createQuery(
+//            "" +
+//                    "select new com.jpabook.jpashop.api.dto.OrderItemQueryDto(oi.order.id, i.name, oi.orderPrice, oi.count)" +
+//                    " from OrderItem oi" +
+//                    " join oi.item i" +
+//                    " where oi.order.id in :orderIds", OrderItemQueryDto::class.java
+//        ).setParameter("orderIds", orderIds).resultList
+//
+//        result.forEach {
+//            it.orderItems = orderItems
+//        }
+//
+//        return result
+//    }
+
     private fun findOrderItems(orderId: Long): List<OrderItemQueryDto> {
-        return em.createQuery("" +
-                "select new com.jpabook.jpashop.api.dto.OrderItemQueryDto(oi.order.id, i.name, oi.orderPrice, oi.count)" +
-                " from OrderItem oi" +
-                " join oi.item i" +
-                " where oi.order.id = :orderId", OrderItemQueryDto::class.java)
+        return em.createQuery(
+            "" +
+                    "select new com.jpabook.jpashop.api.dto.OrderItemQueryDto(oi.order.id, i.name, oi.orderPrice, oi.count)" +
+                    " from OrderItem oi" +
+                    " join oi.item i" +
+                    " where oi.order.id = :orderId", OrderItemQueryDto::class.java
+        )
             .setParameter("orderId", orderId)
             .resultList
     }
@@ -41,5 +65,6 @@ class OrderQueryRepository(
 //                    "join o.delivery d", OrderQueryDto::class.java
 //        ).resultList
 //    }
+
 
 }
