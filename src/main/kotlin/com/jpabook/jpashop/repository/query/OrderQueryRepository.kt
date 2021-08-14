@@ -1,8 +1,10 @@
 package com.jpabook.jpashop.repository.query
 
 import com.jpabook.jpashop.api.dto.OrderItemQueryDto
-import com.jpabook.jpashop.api.dto.OrderQueryDto
+import com.jpabook.jpashop.domain.Address
+import com.jpabook.jpashop.domain.OrderStatus
 import org.springframework.stereotype.Repository
+import java.time.LocalDateTime
 import javax.persistence.EntityManager
 
 /**
@@ -66,5 +68,27 @@ class OrderQueryRepository(
 //        ).resultList
 //    }
 
-
+    fun findAllByDto_flat(): List<OrderFlatDto> {
+        return em.createQuery(
+            "" +
+                    "select new" +
+                    " com.jpabook.jpashop.repository.query.OrderFlatDto(o.id, m.name, o.orderDate, o.status, d.address, i.name, oi.orderPrice, oi.count)" +
+                    " from Order o" +
+                    " join o.member m" +
+                    " join o.delivery d" +
+                    " join o.orderItems oi" +
+                    " join oi.item i", OrderFlatDto::class.java
+        ).resultList
+    }
 }
+
+data class OrderFlatDto(
+    var orderId: Long,
+    var name: String,
+    var orderDate: LocalDateTime,
+    var orderStatus: OrderStatus,
+    var address: Address,
+    var itemName: String,
+    var orderPrice: Int,
+    var count: Int
+)

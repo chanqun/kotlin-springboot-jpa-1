@@ -2,6 +2,7 @@ package com.jpabook.jpashop.api
 
 import com.jpabook.jpashop.api.dto.OrderDto
 import com.jpabook.jpashop.api.dto.OrderItemDto
+import com.jpabook.jpashop.api.dto.OrderItemQueryDto
 import com.jpabook.jpashop.api.dto.OrderQueryDto
 import com.jpabook.jpashop.domain.Order
 import com.jpabook.jpashop.repository.OrderRepository
@@ -9,6 +10,8 @@ import com.jpabook.jpashop.repository.query.OrderQueryRepository
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.util.stream.Collectors.*
+
 
 @RestController
 class OrderApiController(
@@ -108,4 +111,39 @@ class OrderApiController(
 //    fun ordersV5(): List<OrderQueryDto> {
 //        return orderQueryRepository.findAllByDto_optimization()
 //    }
+
+    @GetMapping("/api/v6/orders")
+    fun ordersV6(): List<OrderQueryDto> {
+        val flats = orderQueryRepository.findAllByDto_flat()
+        // 내가 직접 중복을 걸러내면 된다. 1 : N 으로 된 것을
+        // 직접 분해하고 조립
+        // -> 쿼리는 한 번이지만 조인으로 인해 v5 보다 느릴 수 있고 페이징 불가능
+        // 애플리케이션에서 추가 작업이 크다
+
+        return flats.stream()
+            .collect(
+                groupingBy(
+                    { o ->
+                        OrderQueryDto(
+                            o.orderId,
+                            o.name, o.orderDate, o.orderStatus, o.address
+                        )
+                    },
+                    mapping({ o ->
+                        OrderItemQueryDto(
+                            o.orderId,
+                            o.itemName, o.orderPrice, o.count
+                        )
+                    }, toList())
+                )
+            ).entries.stream()
+            .map { e ->
+                OrderQueryDto(
+                    e.key.orderId,
+                    e.key.name, e.key.orderDate, e.key.orderStatus,
+                    e.key.address, e.value
+                )
+            }
+            .collect(toList())
+    }
 }
